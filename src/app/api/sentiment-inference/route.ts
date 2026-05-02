@@ -1,13 +1,6 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import {
-  InvokeEndpointCommand,
-  SageMakerRuntime,
-  SageMakerRuntimeClient,
-} from "@aws-sdk/client-sagemaker-runtime";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { NextResponse } from "next/server";
 import path from "path";
-import { env } from "~/env";
+import fs from "fs/promises";
 import { checkAndUpdateQuota } from "~/lib/quota";
 import { db } from "~/server/db";
 
@@ -73,7 +66,7 @@ export async function POST(req: Request) {
     
     // Using standard fetch and FormData for Hugging Face
     const formData = new FormData();
-    const fileContent = await import("fs/promises").then(fs => fs.readFile(videoPath));
+    const fileContent = await fs.readFile(videoPath);
     const videoBlob = new Blob([fileContent], { type: "video/mp4" });
     formData.append("file", videoBlob, key);
 
