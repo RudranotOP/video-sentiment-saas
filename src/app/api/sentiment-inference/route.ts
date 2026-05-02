@@ -74,8 +74,8 @@ export async function POST(req: Request) {
     // Using standard fetch and FormData for Hugging Face
     const formData = new FormData();
     const fileContent = await import("fs/promises").then(fs => fs.readFile(videoPath));
-    const file = new Blob([fileContent], { type: "video/mp4" });
-    formData.append("file", file, key);
+    const videoBlob = new Blob([fileContent], { type: "video/mp4" });
+    formData.append("file", videoBlob, key);
 
     const aiServerUrl = process.env.AI_SERVER_URL || "http://localhost:8000/analyze";
     
